@@ -3,20 +3,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
-  Activity, 
-  ShieldAlert, 
-  Volume2, 
-  Mic, 
-  Languages, 
-  Sparkles, 
-  Award, 
-  UserCheck, 
-  Building2, 
-  FolderLock,
-  ArrowRight,
-  MonitorPlay,
-  Play,
-  RotateCcw
+  Volume2, Mic, Activity, ShieldAlert, Languages, Sparkles, Award, 
+  UserCheck, Building2, FolderLock, ArrowRight, RotateCcw, Check, X, Info
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -29,7 +17,6 @@ export default function LandingPage() {
   const [secondaryColor, setSecondaryColor] = useState('#EC4899'); // default pink
 
   const handleLaunchDashboard = () => {
-    // Navigate to dashboard route passing selected role and whitelabel parameters
     const params = new URLSearchParams({
       role: selectedRole,
       appName,
@@ -51,11 +38,11 @@ export default function LandingPage() {
       minHeight: '100vh',
       backgroundColor: '#0F172A',
       backgroundImage: 'radial-gradient(ellipse at 50% -20%, rgba(139, 92, 246, 0.15) 0%, transparent 80%)',
-      overflow: 'hidden'
+      overflowX: 'hidden'
     }}>
       {/* Decorative Glow Dots */}
       <div className="glow-spot" style={{ top: '10%', left: '5%' }}></div>
-      <div className="glow-spot-secondary" style={{ top: '60%', right: '5%' }}></div>
+      <div className="glow-spot-secondary" style={{ top: '50%', right: '5%' }}></div>
 
       {/* Floating White Label Sandbox Controller */}
       <div className="glass-panel" style={{
@@ -73,11 +60,11 @@ export default function LandingPage() {
           <h4 style={{ fontSize: '14px', fontWeight: 600 }}>White-Label Sandbox</h4>
         </div>
         <p style={{ fontSize: '11px', color: '#94A3B8', marginBottom: '12px', lineHeight: '1.4' }}>
-          Simulate rebranding without changing code. Colors and logo will apply to the dashboards dynamically.
+          Rebrand this portal dynamically. Updates propagate immediately into the interactive dashboards.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <div>
-            <label style={{ fontSize: '11px', color: '#94A3B8', display: 'block', marginBottom: '4px' }}>App Name</label>
+            <label style={{ fontSize: '11px', color: '#94A3B8', display: 'block', marginBottom: '4px' }}>Platform Name</label>
             <input 
               type="text" 
               value={appName} 
@@ -88,7 +75,7 @@ export default function LandingPage() {
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <div style={{ flex: 1 }}>
-              <label style={{ fontSize: '11px', color: '#94A3B8', display: 'block', marginBottom: '4px' }}>Primary</label>
+              <label style={{ fontSize: '11px', color: '#94A3B8', display: 'block', marginBottom: '4px' }}>Primary Theme</label>
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                 <input 
                   type="color" 
@@ -100,7 +87,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div style={{ flex: 1 }}>
-              <label style={{ fontSize: '11px', color: '#94A3B8', display: 'block', marginBottom: '4px' }}>Secondary</label>
+              <label style={{ fontSize: '11px', color: '#94A3B8', display: 'block', marginBottom: '4px' }}>Accent Color</label>
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                 <input 
                   type="color" 
@@ -122,10 +109,10 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Main Container */}
+      {/* Main Layout Container */}
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 10 }}>
         
-        {/* Navigation */}
+        {/* Navbar */}
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px 0', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ 
@@ -143,10 +130,10 @@ export default function LandingPage() {
             <span style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit', letterSpacing: '-0.03em' }}>{appName}</span>
           </div>
 
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <span style={{ fontSize: '13px', color: '#94A3B8', cursor: 'pointer' }}>Features</span>
-            <span style={{ fontSize: '13px', color: '#94A3B8', cursor: 'pointer' }}>Pricing</span>
-            <span style={{ fontSize: '13px', color: '#94A3B8', cursor: 'pointer' }}>Manuals</span>
+          <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+            <a href="#about" style={{ fontSize: '13px', color: '#94A3B8', textDecoration: 'none' }}>What it does</a>
+            <a href="#comparison" style={{ fontSize: '13px', color: '#94A3B8', textDecoration: 'none' }}>Why we are different</a>
+            <a href="#pricing" style={{ fontSize: '13px', color: '#94A3B8', textDecoration: 'none' }}>Pricing</a>
             <button 
               onClick={() => {
                 setSelectedRole('SUPER_ADMIN');
@@ -156,13 +143,13 @@ export default function LandingPage() {
               className="btn-secondary" 
               style={{ padding: '8px 16px', fontSize: '12px' }}
             >
-              Investor Login
+              Buyer Handover Login
             </button>
           </div>
         </header>
 
-        {/* Hero Section */}
-        <section style={{ textAlign: 'center', padding: '80px 0 60px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {/* Hero Area */}
+        <section style={{ textAlign: 'center', padding: '100px 0 60px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -175,52 +162,193 @@ export default function LandingPage() {
           }}>
             <Sparkles size={14} style={{ color: primaryColor }} />
             <span style={{ fontSize: '12px', fontWeight: 500, color: '#E2E8F0', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-              The World's First Duolingo for Hearing Rehabilitation
+              The World\'s First AI Rehabilitation Platform
             </span>
           </div>
 
           <h1 style={{ 
-            fontSize: '56px', 
+            fontSize: '58px', 
             fontWeight: 800, 
             lineHeight: 1.15, 
-            maxWidth: '900px', 
+            maxWidth: '950px', 
             marginBottom: '24px',
             background: `linear-gradient(to right, #FFFFFF 30%, #CBD5E1 60%, ${primaryColor} 100%)`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             letterSpacing: '-0.04em'
           }}>
-            AI-Powered Hearing & Speech Rehabilitation Platform
+            Re-imagining Auditory & Speech Therapy through AI
           </h1>
 
           <p style={{ 
             fontSize: '18px', 
             color: '#94A3B8', 
-            maxWidth: '650px', 
+            maxWidth: '700px', 
             marginBottom: '40px', 
             lineHeight: 1.6 
           }}>
-            A production-ready SaaS suite assisting cochlear implant recipients, speech therapists, and audiology clinics with gamified sound library training and real-time speech coaching.
+            HearBridge AI combines gamified sound identification tests, canvas-guided mouth/tongue guides, ambient siren alarms, and live conversation caption controllers into a secure multi-tenant SaaS.
           </p>
 
-          {/* Core Interactive Demo Console */}
+          <div style={{ display: 'flex', gap: '16px', marginBottom: '80px' }}>
+            <a href="#demo" className="btn-primary" style={{ background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`, textDecoration: 'none' }}>
+              Try Demo Portals <ArrowRight size={16} />
+            </a>
+            <a href="#comparison" className="btn-secondary" style={{ textDecoration: 'none' }}>
+              Compare with Competitors
+            </a>
+          </div>
+        </section>
+
+        {/* Section: What it does */}
+        <section id="about" style={{ padding: '80px 0', borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
+          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+            <h2 style={{ fontSize: '36px', marginBottom: '12px' }}>Auditory Rehabilitation in the AI Era</h2>
+            <p style={{ color: '#94A3B8', fontSize: '16px', maxWidth: '600px', margin: '0 auto' }}>
+              HearBridge AI bridges the gap between traditional clinical therapy and modern everyday needs.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '30px' }}>
+            
+            <div className="glass-panel" style={{ padding: '30px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '10px', backgroundColor: `${primaryColor}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <Volume2 size={24} color={primaryColor} />
+              </div>
+              <h3 style={{ fontSize: '20px', marginBottom: '12px' }}>Sound Guessing Games</h3>
+              <p style={{ fontSize: '14px', color: '#94A3B8', lineHeight: 1.6 }}>
+                Train ears to identify household signals, emergency sirens, and nature tones through 3 adaptive levels.
+              </p>
+            </div>
+
+            <div className="glass-panel" style={{ padding: '30px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '10px', backgroundColor: `${primaryColor}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <Mic size={24} color={primaryColor} />
+              </div>
+              <h3 style={{ fontSize: '20px', marginBottom: '12px' }}>AI Speech Coach</h3>
+              <p style={{ fontSize: '14px', color: '#94A3B8', lineHeight: 1.6 }}>
+                Evaluate vocal pitches and pronunciation alongside canvas-based tongue and lip guides for vowel positioning.
+              </p>
+            </div>
+
+            <div className="glass-panel" style={{ padding: '30px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '10px', backgroundColor: `${primaryColor}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <ShieldAlert size={24} color={primaryColor} />
+              </div>
+              <h3 style={{ fontSize: '20px', marginBottom: '12px' }}>Ambient Alerting</h3>
+              <p style={{ fontSize: '14px', color: '#94A3B8', lineHeight: 1.6 }}>
+                Continuously monitor surrounding emergency alarms, crying infants, or doorbells and push safety indicators.
+              </p>
+            </div>
+
+            <div className="glass-panel" style={{ padding: '30px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '10px', backgroundColor: `${primaryColor}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <Languages size={24} color={primaryColor} />
+              </div>
+              <h3 style={{ fontSize: '20px', marginBottom: '12px' }}>Conversation Streams</h3>
+              <p style={{ fontSize: '14px', color: '#94A3B8', lineHeight: 1.6 }}>
+                Stream real-time subtitles with speaker tags, slow playback speed filters, and log storage downloads.
+              </p>
+            </div>
+
+            <div className="glass-panel" style={{ padding: '30px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '10px', backgroundColor: `${primaryColor}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <Sparkles size={24} color={primaryColor} />
+              </div>
+              <h3 style={{ fontSize: '20px', marginBottom: '12px' }}>AI Avatar Tutor</h3>
+              <p style={{ fontSize: '14px', color: '#94A3B8', lineHeight: 1.6 }}>
+                Interact with custom avatars illustrating exact speech postures to practice daily lessons.
+              </p>
+            </div>
+
+            <div className="glass-panel" style={{ padding: '30px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '10px', backgroundColor: `${primaryColor}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <Activity size={24} color={primaryColor} />
+              </div>
+              <h3 style={{ fontSize: '20px', marginBottom: '12px' }}>Visual Journey Tracks</h3>
+              <p style={{ fontSize: '14px', color: '#94A3B8', lineHeight: 1.6 }}>
+                Generate vertical milestone records to track accuracy changes and export reports for clinic reviews.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        {/* Section: Competitive Comparison */}
+        <section id="comparison" style={{ padding: '80px 0', borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
+          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+            <h2 style={{ fontSize: '36px', marginBottom: '12px' }}>What Makes HearBridge AI Unique?</h2>
+            <p style={{ color: '#94A3B8', fontSize: '16px', maxWidth: '600px', margin: '0 auto' }}>
+              How we compare with traditional clinical rehabilitation and standard hearing aid apps.
+            </p>
+          </div>
+
+          <div className="glass-panel" style={{ overflow: 'hidden', padding: '0', background: 'rgba(30, 41, 59, 0.3)' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
+              <thead>
+                <tr style={{ backgroundColor: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                  <th style={{ padding: '20px 24px', fontWeight: 600 }}>Core Rehabilitation Features</th>
+                  <th style={{ padding: '20px 24px', fontWeight: 600, color: primaryColor }}>HearBridge AI</th>
+                  <th style={{ padding: '20px 24px', fontWeight: 600, color: '#94A3B8' }}>Traditional Speech Clinics</th>
+                  <th style={{ padding: '20px 24px', fontWeight: 600, color: '#94A3B8' }}>Standard Hearing Apps</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <td style={{ padding: '18px 24px', fontWeight: 500 }}>Live Speech Mouth & Tongue Guides</td>
+                  <td style={{ padding: '18px 24px', color: '#10B981' }}><Check size={18} /> Yes (Canvas Guided)</td>
+                  <td style={{ padding: '18px 24px', color: '#64748B' }}>Only during clinic visits</td>
+                  <td style={{ padding: '18px 24px', color: '#EF4444' }}><X size={18} /> No (Audio only)</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <td style={{ padding: '18px 24px', fontWeight: 500 }}>Continuous Environmental Siren Alerts</td>
+                  <td style={{ padding: '18px 24px', color: '#10B981' }}><Check size={18} /> Yes (Ambient Listening)</td>
+                  <td style={{ padding: '18px 24px', color: '#EF4444' }}><X size={18} /> No</td>
+                  <td style={{ padding: '18px 24px', color: '#EF4444' }}><X size={18} /> No</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <td style={{ padding: '18px 24px', fontWeight: 500 }}>Captions Stream with Slow Playback</td>
+                  <td style={{ padding: '18px 24px', color: '#10B981' }}><Check size={18} /> Yes</td>
+                  <td style={{ padding: '18px 24px', color: '#EF4444' }}><X size={18} /> No</td>
+                  <td style={{ padding: '18px 24px', color: '#64748B' }}>Captions only, no playback filters</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <td style={{ padding: '18px 24px', fontWeight: 500 }}>Gamified Rehabilitation (XP & levels)</td>
+                  <td style={{ padding: '18px 24px', color: '#10B981' }}><Check size={18} /> Yes</td>
+                  <td style={{ padding: '18px 24px', color: '#EF4444' }}><X size={18} /> No</td>
+                  <td style={{ padding: '18px 24px', color: '#64748B' }}>Basic tracking tables</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <td style={{ padding: '18px 24px', fontWeight: 500 }}>Turnkey Tenant Custom White-Labeling</td>
+                  <td style={{ padding: '18px 24px', color: '#10B981' }}><Check size={18} /> Yes (Zero-code setup)</td>
+                  <td style={{ padding: '18px 24px', color: '#EF4444' }}><X size={18} /> No</td>
+                  <td style={{ padding: '18px 24px', color: '#EF4444' }}><X size={18} /> No</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '18px 24px', fontWeight: 500 }}>Corporate Handover Transfer Panel</td>
+                  <td style={{ padding: '18px 24px', color: '#10B981' }}><Check size={18} /> Yes (1-Click migration)</td>
+                  <td style={{ padding: '18px 24px', color: '#EF4444' }}><X size={18} /> No</td>
+                  <td style={{ padding: '18px 24px', color: '#EF4444' }}><X size={18} /> No</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* Section: Interactive Demo Console */}
+        <section id="demo" style={{ padding: '80px 0', borderTop: '1px solid rgba(255, 255, 255, 0.05)', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <h2 style={{ fontSize: '36px', marginBottom: '12px' }}>Interactive Sandbox Portals</h2>
+          <p style={{ color: '#94A3B8', fontSize: '15px', maxWidth: '600px', marginBottom: '40px' }}>
+            Select a target profile role below to explore customized dashboards, logs history, and handover controllers.
+          </p>
+
           <div className="glass-panel" style={{ 
             maxWidth: '640px', 
             width: '100%', 
             padding: '30px', 
-            position: 'relative',
             background: 'rgba(30, 41, 59, 0.5)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            marginBottom: '80px'
+            border: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
-            <h3 style={{ fontSize: '18px', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <MonitorPlay size={20} style={{ color: primaryColor }} />
-              Dashboard Demo Console
-            </h3>
-            <p style={{ fontSize: '13px', color: '#94A3B8', marginBottom: '24px' }}>
-              Select a user role to explore the customized dashboards, rehabilitation tracking logs, and administrative controls.
-            </p>
-
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '24px' }}>
               <div 
                 onClick={() => setSelectedRole('PATIENT')}
@@ -234,7 +362,7 @@ export default function LandingPage() {
                   transition: 'all 0.2s ease'
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                   <span style={{ fontSize: '14px', fontWeight: 600 }}>Patient App</span>
                   <Award size={16} color={selectedRole === 'PATIENT' ? primaryColor : '#94A3B8'} />
                 </div>
@@ -253,7 +381,7 @@ export default function LandingPage() {
                   transition: 'all 0.2s ease'
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                   <span style={{ fontSize: '14px', fontWeight: 600 }}>Therapist Portal</span>
                   <UserCheck size={16} color={selectedRole === 'THERAPIST' ? primaryColor : '#94A3B8'} />
                 </div>
@@ -272,7 +400,7 @@ export default function LandingPage() {
                   transition: 'all 0.2s ease'
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                   <span style={{ fontSize: '14px', fontWeight: 600 }}>Clinic/Org Admin</span>
                   <Building2 size={16} color={selectedRole === 'ORG_ADMIN' ? primaryColor : '#94A3B8'} />
                 </div>
@@ -291,7 +419,7 @@ export default function LandingPage() {
                   transition: 'all 0.2s ease'
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                   <span style={{ fontSize: '14px', fontWeight: 600 }}>Super Admin</span>
                   <FolderLock size={16} color={selectedRole === 'SUPER_ADMIN' ? primaryColor : '#94A3B8'} />
                 </div>
@@ -316,121 +444,53 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Feature Grid */}
-        <section style={{ padding: '60px 0', borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
-          <h2 style={{ textAlign: 'center', fontSize: '32px', marginBottom: '12px' }}>Enterprise-Grade Rehabilitation Modules</h2>
-          <p style={{ textAlign: 'center', color: '#94A3B8', marginBottom: '50px', fontSize: '15px' }}>
-            Built specifically to solve accessibility barriers with artificial intelligence.
-          </p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-            
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <Volume2 size={24} style={{ color: primaryColor, marginBottom: '16px' }} />
-              <h3 style={{ fontSize: '18px', marginBottom: '10px' }}>Sound Recognition Training</h3>
-              <p style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.5 }}>
-                7 distinct categories (Home, Nature, Animals, Emergency) with adaptive levels, interactive guessing, and achievements.
-              </p>
-            </div>
-
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <Mic size={24} style={{ color: primaryColor, marginBottom: '16px' }} />
-              <h3 style={{ fontSize: '18px', marginBottom: '10px' }}>AI Speech Coach</h3>
-              <p style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.5 }}>
-                Real-time pitch, clarity, volume, and pronunciation feedback using Canvas-animated mouth position and tongue placement guides.
-              </p>
-            </div>
-
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <ShieldAlert size={24} style={{ color: primaryColor, marginBottom: '16px' }} />
-              <h3 style={{ fontSize: '18px', marginBottom: '10px' }}>Real-World Sound Detector</h3>
-              <p style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.5 }}>
-                Microphone listening tool targeting emergency sirens, crying babies, barking dogs, and doorbell triggers with danger rating displays.
-              </p>
-            </div>
-
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <Languages size={24} style={{ color: primaryColor, marginBottom: '16px' }} />
-              <h3 style={{ fontSize: '18px', marginBottom: '10px' }}>Live Conversation Assistant</h3>
-              <p style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.5 }}>
-                Real-time speech-to-text subtitle stream incorporating speaker identification, multi-language translation, and slow-playback mode.
-              </p>
-            </div>
-
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <Sparkles size={24} style={{ color: primaryColor, marginBottom: '16px' }} />
-              <h3 style={{ fontSize: '18px', marginBottom: '10px' }}>AI Tutor Avatar</h3>
-              <p style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.5 }}>
-                An interactive teacher illustrating exact speech posture models, walking patients through therapy plans, and offering motivation.
-              </p>
-            </div>
-
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <Activity size={24} style={{ color: primaryColor, marginBottom: '16px' }} />
-              <h3 style={{ fontSize: '18px', marginBottom: '10px' }}>Rehabilitation Journey</h3>
-              <p style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.5 }}>
-                Generates a visual timeline capturing milestones (e.g. Day 1: alarm detected, Day 15: speech test passed) with exportable progress stories.
-              </p>
-            </div>
-
+        {/* Section: Pricing */}
+        <section id="pricing" style={{ padding: '80px 0', borderTop: '1px solid rgba(255, 255, 255, 0.05)', marginBottom: '80px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+            <h2 style={{ fontSize: '36px' }}>Plans Built for Growth</h2>
+            <p style={{ color: '#94A3B8', fontSize: '15px', marginTop: '12px' }}>
+              Configure billing systems linking Stripe, Paystack, and Flutterwave.
+            </p>
           </div>
-        </section>
 
-        {/* Commercial Plan Tiers */}
-        <section style={{ padding: '60px 0', borderTop: '1px solid rgba(255, 255, 255, 0.05)', marginBottom: '80px' }}>
-          <h2 style={{ textAlign: 'center', fontSize: '32px', marginBottom: '12px' }}>Flexible Subscription Plans</h2>
-          <p style={{ textAlign: 'center', color: '#94A3B8', marginBottom: '50px', fontSize: '15px' }}>
-            Supporting global billing bindings through Stripe, Paystack, and Flutterwave.
-          </p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '30px' }}>
             
-            <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-              <h4 style={{ fontSize: '16px', color: '#94A3B8', marginBottom: '8px' }}>Free</h4>
-              <span style={{ fontSize: '28px', fontWeight: 800, marginBottom: '16px' }}>$0</span>
-              <ul style={{ fontSize: '12px', color: '#94A3B8', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px', listStyle: 'none' }}>
-                <li>✓ Standard Sound Training</li>
-                <li>✓ Limited Speech Coach (3/day)</li>
-                <li>✓ Basic Progress History</li>
-              </ul>
-              <button className="btn-secondary" style={{ marginTop: 'auto', fontSize: '12px', width: '100%', justifyContent: 'center' }}>Get Started</button>
-            </div>
-
-            <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%', border: `1px solid ${primaryColor}40` }}>
-              <h4 style={{ fontSize: '16px', color: '#E2E8F0', marginBottom: '8px' }}>Basic</h4>
-              <span style={{ fontSize: '28px', fontWeight: 800, marginBottom: '16px' }}>$19<span style={{ fontSize: '14px', fontWeight: 400, color: '#94A3B8' }}>/mo</span></span>
-              <ul style={{ fontSize: '12px', color: '#94A3B8', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px', listStyle: 'none' }}>
-                <li>✓ Full Sound Recognition</li>
+            <div className="glass-panel" style={{ padding: '30px', display: 'flex', flexDirection: 'column' }}>
+              <h4 style={{ fontSize: '16px', color: '#94A3B8', marginBottom: '8px' }}>Individual Patient</h4>
+              <span style={{ fontSize: '32px', fontWeight: 800, marginBottom: '16px' }}>$19<span style={{ fontSize: '14px', color: '#64748B' }}>/mo</span></span>
+              <ul style={{ fontSize: '13px', color: '#94A3B8', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '30px', listStyle: 'none' }}>
+                <li>✓ Full Sound Recognition Games</li>
                 <li>✓ Infinite AI Speech Coach</li>
-                <li>✓ Real-World Sound Alerting</li>
-                <li>✓ Personal Progress Timeline</li>
+                <li>✓ Ambient Sound Detector Alerts</li>
+                <li>✓ Personal Journey Timelines</li>
               </ul>
-              <button className="btn-primary" style={{ marginTop: 'auto', fontSize: '12px', width: '100%', justifyContent: 'center', background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)` }}>Subscribe</button>
+              <button className="btn-secondary" style={{ marginTop: 'auto', width: '100%', justifyContent: 'center' }}>Get Started</button>
             </div>
 
-            <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-              <h4 style={{ fontSize: '16px', color: '#94A3B8', marginBottom: '8px' }}>Premium Clinic</h4>
-              <span style={{ fontSize: '28px', fontWeight: 800, marginBottom: '16px' }}>$149<span style={{ fontSize: '14px', fontWeight: 400, color: '#94A3B8' }}>/mo</span></span>
-              <ul style={{ fontSize: '12px', color: '#94A3B8', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px', listStyle: 'none' }}>
-                <li>✓ Everything in Basic</li>
+            <div className="glass-panel" style={{ padding: '30px', display: 'flex', flexDirection: 'column', border: `1px solid ${primaryColor}40` }}>
+              <h4 style={{ fontSize: '16px', color: '#E2E8F0', marginBottom: '8px' }}>Clinic Portal</h4>
+              <span style={{ fontSize: '32px', fontWeight: 800, marginBottom: '16px' }}>$149<span style={{ fontSize: '14px', color: '#64748B' }}>/mo</span></span>
+              <ul style={{ fontSize: '13px', color: '#94A3B8', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '30px', listStyle: 'none' }}>
+                <li>✓ Everything in Individual plan</li>
                 <li>✓ 5 Therapist Accounts</li>
                 <li>✓ 50 Patient Accounts</li>
-                <li>✓ PDF/Excel Progress Reporting</li>
-                <li>✓ Clinic Custom Branding</li>
+                <li>✓ Workout Plan Creator & Assigner</li>
+                <li>✓ Clinic Portal Branding Customizer</li>
               </ul>
-              <button className="btn-secondary" style={{ marginTop: 'auto', fontSize: '12px', width: '100%', justifyContent: 'center' }}>Choose Premium</button>
+              <button className="btn-primary" style={{ marginTop: 'auto', width: '100%', justifyContent: 'center', background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)` }}>Get Started</button>
             </div>
 
-            <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-              <h4 style={{ fontSize: '16px', color: '#94A3B8', marginBottom: '8px' }}>Enterprise</h4>
-              <span style={{ fontSize: '28px', fontWeight: 800, marginBottom: '16px' }}>Custom</span>
-              <ul style={{ fontSize: '12px', color: '#94A3B8', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px', listStyle: 'none' }}>
+            <div className="glass-panel" style={{ padding: '30px', display: 'flex', flexDirection: 'column' }}>
+              <h4 style={{ fontSize: '16px', color: '#94A3B8', marginBottom: '8px' }}>Enterprise Turnkey</h4>
+              <span style={{ fontSize: '32px', fontWeight: 800, marginBottom: '16px' }}>Custom</span>
+              <ul style={{ fontSize: '13px', color: '#94A3B8', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '30px', listStyle: 'none' }}>
                 <li>✓ Unlimited Accounts</li>
-                <li>✓ White-labeling (logo, custom domains, email domains)</li>
-                <li>✓ Dedicated Database backup keys</li>
+                <li>✓ White-labeling (subdomains, domains)</li>
+                <li>✓ Database JSON backup relays</li>
+                <li>✓ 1-Click Buyer Handover Panel</li>
                 <li>✓ HIPAA & GDPR Compliant setup</li>
               </ul>
-              <button className="btn-secondary" style={{ marginTop: 'auto', fontSize: '12px', width: '100%', justifyContent: 'center' }}>Contact Sales</button>
+              <button className="btn-secondary" style={{ marginTop: 'auto', width: '100%', justifyContent: 'center' }}>Contact Sales</button>
             </div>
 
           </div>
