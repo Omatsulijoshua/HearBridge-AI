@@ -1,0 +1,260 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ORG_ADMIN
+  THERAPIST
+  PATIENT
+}
+
+model Organization {
+  id               String            @id @default(uuid())
+  name             String
+  subdomain        String            @unique
+  customDomain     String?           @unique
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  users            User[]
+  patients         Patient[]
+  therapists       Therapist[]
+  whiteLabelConfig WhiteLabelConfig?
+  subscription     Subscription?
+}
+
+model User {
+  id                 String        @id @default(uuid())
+  email              String        @unique
+  passwordHash       String?
+  name               String
+  role               Role
+  isActive           Boolean       @default(true)
+  twoFactorEnabled   Boolean       @default(false)
+  twoFactorSecret    String?
+  otpSecret          String?
+  googleId           String?       @unique
+  appleId            String?       @unique
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  organizationId     String?
+  organization       Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  therapistProfile   Therapist?
+  patientProfile     Patient?
+  sessionsCreated    Session[]     @relation("CreatedSessions")
+  refreshTokens      RefreshToken[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Therapist {
+  id             String         @id @default(uuid())
+  userId         String         @unique
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  specialty      String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  patients       Patient[]      @relation("TherapistPatients")
+  sessions       Session[]
+}
+
+model Patient {
+  id                  String             @id @default(uuid())
+  userId              String             @unique
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId      String
+  organization        Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  therapistId         String?
+  therapist           Therapist?         @relation("TherapistPatients", fields: [therapistId], references: [id])
+  hearingAidType      String? // Cochlear Implant, Hearing Aid, None, etc.
+  rehabAge            Int? // Years/months in rehabilitation
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  xp                  Int                @default(0)
+  level               Int                @default(1)
+  soundProgress       SoundProgress[]
+  speechLogs          SpeechLog[]
+  listeningProgress   ListeningProgress[]
+  realWorldDetections RealWorldDetection[]
+  milestones          Milestone[]
+  sessions            Session[]
+}
+
+model SoundLibrary {
+  id             String          @id @default(uuid())
+  title          String
+  category       String // Home, Animal, Nature, Emergency, Transportation, Workplace, School
+  difficulty     String // Beginner, Intermediate, Advanced
+  audioUrl       String
+  explanation    String
+  answerOptions  String // JSON array: ["Dog", "Cat", "Siren"]
+  correctAnswer  String
+  createdAt      DateTime        @default(now())
+  soundProgress  SoundProgress[]
+}
+
+model SoundProgress {
+  id           String       @id @default(uuid())
+  patientId    String
+  patient      Patient      @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  soundId      String
+  sound        SoundLibrary @relation(fields: [soundId], references: [id], onDelete: Cascade)
+  isCorrect    Boolean
+  responseTime Int // In milliseconds
+  createdAt    DateTime     @default(now())
+}
+
+model SpeechLog {
+  id                 String   @id @default(uuid())
+  patientId          String
+  patient            Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  promptText         String
+  audioUrl           String?
+  pronunciationScore Int
+  clarityScore       Int
+  volumeScore        Int
+  pitchScore         Int
+  confidenceScore    Int
+  suggestions        String?
+  createdAt          DateTime @default(now())
+}
+
+model ListeningProgress {
+  id                 String   @id @default(uuid())
+  patientId          String
+  patient            Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  audioClipUrl       String
+  question           String
+  userAnswer         String
+  isCorrect          Boolean
+  responseTime       Int
+  createdAt          DateTime @default(now())
+}
+
+model RealWorldDetection {
+  id           String   @id @default(uuid())
+  patientId    String
+  patient      Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  soundType    String // Doorbell, Sirens, Baby Crying, Dog Barking, Car Horn, Alarm
+  importance   String // High, Medium, Low
+  safetyLevel  String // Safe, Watchful, Danger
+  detectedAt   DateTime @default(now())
+}
+
+model Milestone {
+  id          String   @id @default(uuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  dayCount    Int
+  createdAt   DateTime @default(now())
+}
+
+model Session {
+  id             String     @id @default(uuid())
+  title          String
+  scheduledAt    DateTime
+  duration       Int // minutes
+  meetingLink    String?
+  notes          String?
+  createdById    String
+  createdBy      User       @relation("CreatedSessions", fields: [createdById], references: [id])
+  therapistId    String?
+  therapist      Therapist? @relation(fields: [therapistId], references: [id])
+  patientId      String?
+  patient        Patient?   @relation(fields: [patientId], references: [id])
+  createdAt      DateTime   @default(now())
+}
+
+model WhiteLabelConfig {
+  id             String       @id @default(uuid())
+  organizationId String       @unique
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  appName        String       @default("HearBridge AI")
+  logoUrl        String?
+  primaryColor   String       @default("#8B5CF6") // Tailwind/custom purple
+  secondaryColor String       @default("#EC4899") // Tailwind/custom pink
+  smtpHost       String?
+  smtpPort       Int?
+  smtpUser       String?
+  smtpPassword   String?
+  smtpFromEmail  String?
+  emailTemplates String?      @default("{}") // JSON string of template structures
+  updatedAt      DateTime     @updatedAt
+}
+
+model Subscription {
+  id             String       @id @default(uuid())
+  organizationId String       @unique
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  planName       String       @default("FREE") // FREE, BASIC, PREMIUM, ENTERPRISE
+  status         String       @default("ACTIVE") // ACTIVE, CANCELED, EXPIRED
+  amount         Float        @default(0.0)
+  stripeCustId   String?
+  stripeSubId    String?
+  trialEndsAt    DateTime?
+  endsAt         DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model SystemSettings {
+  id                     String    @id @default("global_config")
+  ownerEmail             String    @default("admin@hearbridge.ai")
+  licenseKey             String    @default("HB-FREE-DEV-LICENSE")
+  licenseStatus          String    @default("VALID") // VALID, EXPIRED, SUSPENDED
+  globalStripeSecretKey  String?
+  globalStripePublishKey String?
+  globalPaystackSecret   String?
+  globalFlutterwaveSecret String?
+  openaiApiKey           String?
+  googleSpeechKey        String?
+  whisperApiKey          String?
+  elevenlabsApiKey       String?
+  backupFrequencyHours   Int       @default(24)
+  lastBackupAt           DateTime?
+  updatedAt              DateTime  @updatedAt
+}
+
+model SystemBackupLog {
+  id          String   @id @default(uuid())
+  filename    String
+  sizeBytes   Int
+  backupUrl   String?
+  status      String // COMPLETED, FAILED
+  errorLog    String?
+  createdAt   DateTime @default(now())
+}
+
+model Translation {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  en        String
+  fr        String?
+  es        String?
+  pt        String?
+  ar        String?
+  hi        String?
+  zh        String?
+  sw        String?
+  yo        String?
+  ig        String?
+  ha        String?
+  pcm       String? // Nigerian Pidgin
+  createdAt DateTime @default(now())
+}
