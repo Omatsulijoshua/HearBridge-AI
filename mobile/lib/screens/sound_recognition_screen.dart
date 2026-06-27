@@ -65,7 +65,7 @@ class _SoundRecognitionScreenState extends State<SoundRecognitionScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
-              justifyAxisAlignment: SystemMouseCursors.basic == null ? MainAxisAlignment.spaceBetween : MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Score: $_score/$_attempts', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const Chip(label: Text('Beginner', style: TextStyle(fontSize: 11))),
@@ -109,7 +109,7 @@ class _SoundRecognitionScreenState extends State<SoundRecognitionScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.02),
+                  color: Colors.white.withAlpha(5),
                   borderRadius: BorderRadius.circular(10),
                   border: const Border(left: BorderSide(color: Color(0xFF8B5CF6), width: 4)),
                 ),
@@ -118,7 +118,7 @@ class _SoundRecognitionScreenState extends State<SoundRecognitionScreen> {
                   children: [
                     Text(_feedback!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                     const SizedBox(height: 4),
-                    Text(current['explanation'], style: const TextStyle(color: Colors.white55, fontSize: 12)),
+                    Text(current['explanation'], style: const TextStyle(color: Colors.white54, fontSize: 12)),
                   ],
                 ),
               ),

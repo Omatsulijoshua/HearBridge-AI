@@ -53,7 +53,7 @@ class JourneyTimelineScreen extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(ms['title']!, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
-                      Text(ms['desc']!, style: const TextStyle(fontSize: 12, color: Colors.white55)),
+                      Text(ms['desc']!, style: const TextStyle(fontSize: 12, color: Colors.white54)),
                       const SizedBox(height: 24),
                     ],
                   ),

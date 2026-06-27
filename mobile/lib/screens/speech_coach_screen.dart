@@ -117,7 +117,7 @@ class _SpeechCoachScreenState extends State<SpeechCoachScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(e.key, style: const TextStyle(fontSize: 11, color: Colors.white55)),
+                      Text(e.key, style: const TextStyle(fontSize: 11, color: Colors.white54)),
                       Text('${e.value}%', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: e.value > 85 ? Colors.green : Colors.yellow)),
                     ],
                   ),
@@ -136,7 +136,7 @@ class _SpeechCoachScreenState extends State<SpeechCoachScreen> {
       style: OutlinedButton.styleFrom(
         foregroundColor: active ? Colors.white : Colors.white60,
         side: BorderSide(color: active ? const Color(0xFF8B5CF6) : Colors.white10),
-        backgroundColor: active ? const Color(0xFF8B5CF6).withOpacity(0.1) : Colors.transparent,
+        backgroundColor: active ? const Color(0xFF8B5CF6).withAlpha(26) : Colors.transparent,
       ),
       onPressed: () => setState(() => _targetWord = word),
       child: Text(word),
