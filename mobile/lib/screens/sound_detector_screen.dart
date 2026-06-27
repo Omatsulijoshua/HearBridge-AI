@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 
 class SoundDetectorScreen extends StatefulWidget {
   const SoundDetectorScreen({super.key});
@@ -30,6 +31,9 @@ class _SoundDetectorScreenState extends State<SoundDetectorScreen> {
             'safety': 'Watchful',
             'color': Colors.orange
           });
+          if (!RehabProgress.completedStages.value.contains('sound_detector')) {
+            RehabProgress.completedStages.value = [...RehabProgress.completedStages.value, 'sound_detector'];
+          }
         });
       });
     }

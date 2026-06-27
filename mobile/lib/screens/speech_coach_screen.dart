@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 
 class SpeechCoachScreen extends StatefulWidget {
   const SpeechCoachScreen({super.key});
@@ -22,6 +23,9 @@ class _SpeechCoachScreenState extends State<SpeechCoachScreen> {
           'Volume': 85,
           'Fluency': 90,
         };
+        if (!RehabProgress.completedStages.value.contains('speech_coach')) {
+          RehabProgress.completedStages.value = [...RehabProgress.completedStages.value, 'speech_coach'];
+        }
       });
     } else {
       setState(() {

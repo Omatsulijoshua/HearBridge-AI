@@ -21,6 +21,69 @@ function DashboardContent() {
   const [activeRole, setActiveRole] = useState<string>(roleQuery);
   const [activeTab, setActiveTab] = useState<string>('overview');
 
+  // Progression system states
+  const [completedStages, setCompletedStages] = useState<string[]>([]);
+  const [progressionAlert, setProgressionAlert] = useState<string | null>(null);
+
+  const handleSelectTab = (tabId: string) => {
+    if (activeRole !== 'PATIENT') {
+      setActiveTab(tabId);
+      return;
+    }
+
+    if (tabId === 'sound-training' || tabId === 'timeline') {
+      setActiveTab(tabId);
+      setProgressionAlert(null);
+      return;
+    }
+
+    if (tabId === 'speech-coach') {
+      if (soundScore >= 3 || completedStages.includes('sound-training')) {
+        setActiveTab(tabId);
+        setProgressionAlert(null);
+      } else {
+        setProgressionAlert('🔒 Stage 2 Locked: Complete Stage 1 (Sound Recognition) by getting at least 3 correct answers first.');
+      }
+      return;
+    }
+
+    if (tabId === 'sound-detector') {
+      const speechComplete = speechLog.length >= 1 || completedStages.includes('speech-coach');
+      if (speechComplete) {
+        setActiveTab(tabId);
+        setProgressionAlert(null);
+      } else {
+        setProgressionAlert('🔒 Stage 3 Locked: Complete Stage 2 (AI Speech Coach) by speaking and analyzing at least 1 word first.');
+      }
+      return;
+    }
+
+    if (tabId === 'conversation') {
+      const detectorComplete = detectionLogs.length >= 3 || completedStages.includes('sound-detector');
+      if (detectorComplete) {
+        setActiveTab(tabId);
+        setProgressionAlert(null);
+      } else {
+        setProgressionAlert('🔒 Stage 4 Locked: Complete Stage 3 (Ambient Detector) by trigger-monitoring at least 1 sound first.');
+      }
+      return;
+    }
+
+    if (tabId === 'ai-tutor') {
+      const conversationComplete = captionsList.length >= 3 || completedStages.includes('conversation');
+      if (conversationComplete) {
+        setActiveTab(tabId);
+        setProgressionAlert(null);
+      } else {
+        setProgressionAlert('🔒 Stage 5 Locked: Complete Stage 4 (Captions Stream) by transcribing at least 1 conversation line first.');
+      }
+      return;
+    }
+
+    setActiveTab(tabId);
+    setProgressionAlert(null);
+  };
+
   // Sync state if URL changes
   useEffect(() => {
     setActiveRole(roleQuery);
@@ -62,9 +125,15 @@ function DashboardContent() {
     const current = soundsData[currentSoundIndex];
     setSoundAttempts(prev => prev + 1);
     if (guess === current.correct) {
-      setSoundScore(prev => prev + 1);
+      const nextScore = soundScore + 1;
+      setSoundScore(nextScore);
       setXp(prev => prev + 25);
-      setSoundAnswerFeedback('CORRECT! +25 XP');
+      if (nextScore >= 3) {
+        setCompletedStages(prev => [...prev, 'sound-training']);
+        setSoundAnswerFeedback('CORRECT! +25 XP. 🎉 STAGE 1 COMPLETE! You have unlocked Stage 2: AI Speech Coach!');
+      } else {
+        setSoundAnswerFeedback('CORRECT! +25 XP');
+      }
       if (xp + 25 >= level * 200) {
         setLevel(prev => prev + 1);
       }
@@ -157,10 +226,16 @@ function DashboardContent() {
       setSpeechScores({ clarity, pronunciation, volume, confidence });
       setXp(prev => prev + 30);
       
-      setSpeechLog(prev => [
+      const newLogs = [
         { word: targetWord, clarity, pronunciation, volume, date: new Date().toLocaleTimeString() },
-        ...prev
-      ]);
+        ...speechLog
+      ];
+      setSpeechLog(newLogs);
+      
+      if (newLogs.length === 1) {
+        setCompletedStages(prev => [...prev, 'speech-coach']);
+        alert('🎉 STAGE 2 COMPLETE! You have unlocked Stage 3: Ambient Detector!');
+      }
     } else {
       setSpeechActive(true);
       // Simulate speech recording audio wave pulse
@@ -189,17 +264,22 @@ function DashboardContent() {
       setDetecting(true);
       // Mock sound trigger after 3s
       setTimeout(() => {
-        setDetectionLogs(prev => [
-          {
-            id: Date.now(),
-            type: 'Baby Crying',
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            importance: 'High',
-            safety: 'Watchful',
-            color: '#F59E0B'
-          },
-          ...prev
-        ]);
+        setDetectionLogs(prev => {
+          const updated = [
+            {
+              id: Date.now(),
+              type: 'Baby Crying',
+              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              importance: 'High',
+              safety: 'Watchful',
+              color: '#F59E0B'
+            },
+            ...prev
+          ];
+          setCompletedStages(c => [...c, 'sound-detector']);
+          alert('🎉 STAGE 3 COMPLETE! You have unlocked Stage 4: Live Captions Stream!');
+          return updated;
+        });
         setXp(prev => prev + 15);
       }, 3000);
     }
@@ -221,10 +301,15 @@ function DashboardContent() {
       setTranscribing(true);
       // Simulate real-time captions stream
       setTimeout(() => {
-        setCaptionsList(prev => [
-          ...prev,
-          { speaker: 'Therapist Jane', text: 'Excellent! Your timeline shows a 90% accuracy score.', time: '11:17 AM' }
-        ]);
+        setCaptionsList(prev => {
+          const updated = [
+            ...prev,
+            { speaker: 'Therapist Jane', text: 'Excellent! Your timeline shows a 90% accuracy score.', time: '11:17 AM' }
+          ];
+          setCompletedStages(c => [...c, 'conversation']);
+          alert('🎉 STAGE 4 COMPLETE! You have unlocked Stage 5: AI Tutor Avatar!');
+          return updated;
+        });
       }, 2500);
     }
   };
@@ -461,37 +546,37 @@ function DashboardContent() {
           {activeRole === 'PATIENT' && (
             <>
               <div 
-                onClick={() => setActiveTab('sound-training')} 
+                onClick={() => handleSelectTab('sound-training')} 
                 style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'sound-training' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'sound-training' ? primaryColor : '#94A3B8' }}
               >
                 <Volume2 size={16} /> Sound Recognition
               </div>
               <div 
-                onClick={() => setActiveTab('speech-coach')} 
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'speech-coach' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'speech-coach' ? primaryColor : '#94A3B8' }}
+                onClick={() => handleSelectTab('speech-coach')} 
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'speech-coach' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'speech-coach' ? primaryColor : '#94A3B8', opacity: (soundScore >= 3 || completedStages.includes('sound-training')) ? 1 : 0.5 }}
               >
-                <Mic size={16} /> AI Speech Coach
+                <Mic size={16} /> AI Speech Coach {(soundScore >= 3 || completedStages.includes('sound-training')) ? '' : '🔒'}
               </div>
               <div 
-                onClick={() => setActiveTab('sound-detector')} 
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'sound-detector' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'sound-detector' ? primaryColor : '#94A3B8' }}
+                onClick={() => handleSelectTab('sound-detector')} 
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'sound-detector' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'sound-detector' ? primaryColor : '#94A3B8', opacity: (speechLog.length >= 1 || completedStages.includes('speech-coach')) ? 1 : 0.5 }}
               >
-                <ShieldAlert size={16} /> Ambient Detector
+                <ShieldAlert size={16} /> Ambient Detector {(speechLog.length >= 1 || completedStages.includes('speech-coach')) ? '' : '🔒'}
               </div>
               <div 
-                onClick={() => setActiveTab('conversation')} 
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'conversation' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'conversation' ? primaryColor : '#94A3B8' }}
+                onClick={() => handleSelectTab('conversation')} 
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'conversation' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'conversation' ? primaryColor : '#94A3B8', opacity: (detectionLogs.length >= 3 || completedStages.includes('sound-detector')) ? 1 : 0.5 }}
               >
-                <Languages size={16} /> Captions Stream
+                <Languages size={16} /> Captions Stream {(detectionLogs.length >= 3 || completedStages.includes('sound-detector')) ? '' : '🔒'}
               </div>
               <div 
-                onClick={() => setActiveTab('ai-tutor')} 
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'ai-tutor' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'ai-tutor' ? primaryColor : '#94A3B8' }}
+                onClick={() => handleSelectTab('ai-tutor')} 
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'ai-tutor' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'ai-tutor' ? primaryColor : '#94A3B8', opacity: (captionsList.length >= 3 || completedStages.includes('conversation')) ? 1 : 0.5 }}
               >
-                <Sparkles size={16} /> AI Tutor Avatar
+                <Sparkles size={16} /> AI Tutor Avatar {(captionsList.length >= 3 || completedStages.includes('conversation')) ? '' : '🔒'}
               </div>
               <div 
-                onClick={() => setActiveTab('timeline')} 
+                onClick={() => handleSelectTab('timeline')} 
                 style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'timeline' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'timeline' ? primaryColor : '#94A3B8' }}
               >
                 <Activity size={16} /> Journey Timeline
@@ -590,6 +675,25 @@ function DashboardContent() {
             </div>
           )}
         </div>
+
+        {/* Progression Lock Alert Banner */}
+        {activeRole === 'PATIENT' && progressionAlert && (
+          <div className="glass-panel" style={{
+            padding: '16px 20px',
+            backgroundColor: 'rgba(239, 68, 68, 0.05)',
+            borderLeft: '4px solid #EF4444',
+            borderRadius: '8px',
+            marginBottom: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            fontSize: '13px',
+            color: '#FCA5A5'
+          }}>
+            <Info size={18} style={{ color: '#EF4444', flexShrink: 0 }} />
+            <span>{progressionAlert}</span>
+          </div>
+        )}
 
         {/* ----------------------------------------------------
             TAB RENDERERS

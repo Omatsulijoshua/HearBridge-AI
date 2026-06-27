@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 
 class SoundRecognitionScreen extends StatefulWidget {
   const SoundRecognitionScreen({super.key});
@@ -38,6 +39,12 @@ class _SoundRecognitionScreenState extends State<SoundRecognitionScreen> {
       if (value == _sounds[_currentIndex]['correct']) {
         _score++;
         _feedback = 'Correct! +25 XP';
+        if (_score >= 3) {
+          _feedback = 'Correct! +25 XP. 🎉 Stage 1 Complete! AI Speech Coach is now unlocked!';
+          if (!RehabProgress.completedStages.value.contains('sound_training')) {
+            RehabProgress.completedStages.value = [...RehabProgress.completedStages.value, 'sound_training'];
+          }
+        }
       } else {
         _feedback = 'Incorrect. It was ${_sounds[_currentIndex]['correct']}.';
       }
