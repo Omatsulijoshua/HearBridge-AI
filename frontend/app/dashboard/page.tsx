@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { 
   Volume2, Mic, Activity, ShieldAlert, Languages, Sparkles, Award, 
   UserCheck, Building2, FolderLock, Plus, Send, Download, Upload, 
-  Settings, LogOut, Trash2, Calendar, FileText, ChevronRight, Play, CheckCircle
+  Settings, LogOut, Trash2, Calendar, FileText, ChevronRight, Play, CheckCircle, Info, Headphones
 } from 'lucide-react';
 
 function DashboardContent() {
@@ -581,6 +581,12 @@ function DashboardContent() {
               >
                 <Activity size={16} /> Journey Timeline
               </div>
+              <div 
+                onClick={() => handleSelectTab('airpods-hub')} 
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', backgroundColor: activeTab === 'airpods-hub' ? 'rgba(255, 255, 255, 0.05)' : 'transparent', color: activeTab === 'airpods-hub' ? primaryColor : '#94A3B8' }}
+              >
+                <Headphones size={16} /> AirPods Hearing Hub
+              </div>
             </>
           )}
 
@@ -983,6 +989,113 @@ function DashboardContent() {
                 </div>
               </div>
 
+            </div>
+          </div>
+        )}
+
+        {/* PATIENT - AirPods Hearing Hub */}
+        {activeRole === 'PATIENT' && activeTab === 'airpods-hub' && (
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '30px' }}>
+            <div className="glass-panel" style={{ padding: '32px' }}>
+              <h2 style={{ fontSize: '20px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Headphones size={22} style={{ color: primaryColor }} />
+                AirPods Pro Hearing Calibration
+              </h2>
+              <p style={{ fontSize: '13px', color: '#94A3B8', marginBottom: '24px', lineHeight: 1.5 }}>
+                Sync your Apple Health Audiogram or manually calibrate your AirPods frequency gains to dynamically adjust HearBridge AI training clip volumes.
+              </p>
+
+              <h3 style={{ fontSize: '14px', marginBottom: '16px' }}>Left & Right Frequency Adjustment (dB)</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '24px' }}>
+                {['500 Hz (Speech Bass)', '1 kHz (Speech Mid)', '2 kHz (Clarity)', '4 kHz (Treble)'].map((freq, idx) => (
+                  <div key={idx}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '4px' }}>
+                      <span>{freq}</span>
+                      <span style={{ color: primaryColor, fontFamily: 'monospace' }}>+{idx === 2 || idx === 3 ? '12' : '4'} dB</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                      <span style={{ fontSize: '11px', color: '#64748B' }}>0dB</span>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="24" 
+                        defaultValue={idx === 2 || idx === 3 ? 12 : 4} 
+                        style={{ flex: 1, accentColor: primaryColor }} 
+                      />
+                      <span style={{ fontSize: '11px', color: '#64748B' }}>24dB</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button 
+                  onClick={() => alert('Calibrated AirPods EQ! Audio clip volumes boosted dynamically at 2kHz and 4kHz to compensate for high-frequency hearing loss.')}
+                  className="btn-primary" 
+                  style={{ background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)` }}
+                >
+                  Apply Calibration Curve
+                </button>
+                <button 
+                  onClick={() => alert('Connected to Apple Health API. Loaded Audiogram tested on June 12, 2026.')}
+                  className="btn-secondary"
+                >
+                  Sync Apple Health
+                </button>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div className="glass-panel" style={{ padding: '24px' }}>
+                <h3 style={{ fontSize: '16px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Sparkles size={18} style={{ color: secondaryColor }} />
+                  Spatial Localization Game
+                </h3>
+                <p style={{ fontSize: '12px', color: '#94A3B8', marginBottom: '16px', lineHeight: 1.4 }}>
+                  Put on your AirPods Pro with Spatial Audio. Listen to the 3D panned sound and point where it originated.
+                </p>
+
+                <div style={{ padding: '16px', backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center', marginBottom: '16px' }}>
+                  <button 
+                    onClick={() => alert('Playing 3D sound panned at 45 degrees Right...')} 
+                    className="btn-secondary" 
+                    style={{ fontSize: '11px', padding: '6px 12px', marginBottom: '12px' }}
+                  >
+                    🔊 Play 3D Sound
+                  </button>
+                  <label style={{ fontSize: '11px', color: '#94A3B8', display: 'block', marginBottom: '6px' }}>Point direction angle (degrees):</label>
+                  <input type="range" min="-90" max="90" defaultValue="0" style={{ width: '100%', accentColor: secondaryColor }} id="localization-angle" />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#64748B', marginTop: '4px' }}>
+                    <span>Left 90°</span>
+                    <span>Center 0°</span>
+                    <span>Right 90°</span>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => {
+                    const angle = (document.getElementById('localization-angle') as HTMLInputElement)?.value;
+                    alert(`Sound was played at Right 45°. Your guess was ${angle}°. Localization accuracy error: ${Math.abs(45 - parseInt(angle))}°. Good job!`);
+                  }}
+                  className="btn-primary" 
+                  style={{ width: '100%', justifyContent: 'center', fontSize: '12px' }}
+                >
+                  Submit Angle Guess
+                </button>
+              </div>
+
+              <div className="glass-panel" style={{ padding: '24px' }}>
+                <h3 style={{ fontSize: '16px', marginBottom: '10px' }}>AirPods Live Listen Mode</h3>
+                <p style={{ fontSize: '12px', color: '#94A3B8', marginBottom: '12px', lineHeight: 1.4 }}>
+                  Route remote microphone feeds into HearBridge\'s captions analyzer.
+                </p>
+                <div style={{ fontSize: '11px', color: '#94A3B8', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <span>1. Connect AirPods Pro to iPhone/iPad.</span>
+                  <span>2. Enable <strong>Hearing</strong> in iOS Control Center.</span>
+                  <span>3. Turn on <strong>Live Listen</strong> or <strong>Conversation Boost</strong>.</span>
+                  <span>4. Audio routes directly to speech-to-text streams.</span>
+                </div>
+              </div>
             </div>
           </div>
         )}

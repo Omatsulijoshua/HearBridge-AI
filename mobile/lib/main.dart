@@ -4,6 +4,7 @@ import 'screens/speech_coach_screen.dart';
 import 'screens/sound_detector_screen.dart';
 import 'screens/conversation_assistant_screen.dart';
 import 'screens/journey_timeline_screen.dart';
+import 'screens/airpods_hub_screen.dart';
 
 void main() {
   runApp(const HearBridgeApp());
@@ -39,6 +40,7 @@ class HearBridgeApp extends StatelessWidget {
         '/ambient_detector': (context) => const SoundDetectorScreen(),
         '/live_conversation': (context) => const ConversationAssistantScreen(),
         '/timeline': (context) => const JourneyTimelineScreen(),
+        '/airpods_hub': (context) => const AirPodsHubScreen(),
       },
     );
   }
@@ -125,6 +127,16 @@ class PatientPortalHome extends StatelessWidget {
                   route: '/timeline',
                   color: Colors.green,
                   isUnlocked: timelineUnlocked,
+                  unlockMsg: '',
+                ),
+                _buildModuleCard(
+                  context,
+                  title: 'AirPods Hearing Hub',
+                  desc: 'Sync Apple Health audiograms and train with spatial 3D audio games.',
+                  icon: Icons.headphones,
+                  route: '/airpods_hub',
+                  color: Colors.blue,
+                  isUnlocked: true,
                   unlockMsg: '',
                 ),
               ],
